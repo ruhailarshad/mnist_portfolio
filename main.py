@@ -1,4 +1,6 @@
 
+import utils.transport
+import utils.session
 import glob
 import os
 import random
@@ -510,7 +512,10 @@ def predict_and_save(model, path: str, out_dir: Path, device) -> int:
     fig, axes = plt.subplots(1, 3, figsize=(11, 4))
     axes[0].imshow(np.array(img_orig), cmap="gray"); axes[0].set_title("Loaded"); axes[0].axis("off")
     axes[1].imshow(img28, cmap="gray"); axes[1].set_title("Preprocessed 28×28"); axes[1].axis("off")
-    axes[2].bar(range(10), probs, color="#457B9D"); axes[2].set_xticks(range(10)); axes[2].set_title(f"Pred: {pred}")
+    axes[2].fill_between(range(10), probs, alpha=0.5, color="#457B9D")
+    axes[2].plot(range(10), probs, "o-", color="#2A9D8F", markersize=6, linewidth=2)
+    axes[2].set_xticks(range(10)); axes[2].set_xlabel("Digit"); axes[2].set_ylabel("Probability")
+    axes[2].set_title(f"Pred: {pred}"); axes[2].set_ylim(0, 1.05); axes[2].grid(True, alpha=0.3)
     plt.tight_layout(); plt.savefig(out_dir / f"{Path(path).stem}_prediction.png", dpi=200); plt.close()
     return pred
 
